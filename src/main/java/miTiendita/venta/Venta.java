@@ -10,6 +10,10 @@ public class Venta {
     List<LineaDeDetalle> ld = new ArrayList<LineaDeDetalle>();
     IDesctoStrategy IDescto;
 
+    public List<LineaDeDetalle> getLd() {
+        return ld;
+    }
+
     public Venta(int diaSemana, boolean terceraEdad)
     {
         this.diaSemana = diaSemana;
@@ -25,11 +29,43 @@ public class Venta {
 
     public void addDescto()
     {
-        IDescto = new SinDescuento();
+        switch (diaSemana){
+            //Lunes
+            case 1:
+                IDescto = new AdultoMayor();
+                break;
+            case 2:
+                IDescto = new SinDescuento();
+                break;
+            case 3:
+                IDescto = new MenonitaDescuento();
+                break;
+            case 4:
+                IDescto = new FrutaDescuento();
+                break;
+            case 5:
+                IDescto = new EmbutidosLacteos();
+                break;
+            case 6:
+                IDescto = new SinDescuento();
+                break;
+            //domingo
+            case 7:
+                IDescto = new AdultoMayor();
+                break;
+        }
+
     }
 
     public double getTotal()
     {
-        return 0;
+        float sumaP=0;
+        for (LineaDeDetalle producto : ld){
+            sumaP+=(producto.p.getPunit() * producto.ctd);
+        }
+        double totalVenta=((sumaP)-(IDescto.getDescto(this)))*1.16;
+        System.out.println("TOTAL= "+totalVenta);
+
+        return totalVenta;
     }
 }
